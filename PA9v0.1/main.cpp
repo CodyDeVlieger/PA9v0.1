@@ -3,16 +3,18 @@
 #include <memory>
 #include <cmath>
 #include <random>
-#include "Player.hpp"
-#include "Enemy.hpp"
+#include "Entity.hpp"
+
+
+
 
 
 
 
 int main() {
     // Window setup
-    const int windowWidth = 800;
-    const int windowHeight = 600;
+    const int windowWidth = 1000;
+    const int windowHeight = 800;
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Top-Down Shooter");
     window.setFramerateLimit(60);
 
