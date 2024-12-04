@@ -1,5 +1,7 @@
 # PA9v0.1
 
-first working branch 
-wsad movemnt
-enemy spawns
+top down shooter
+
+-wsad movemnt
+-space bar shooting
+
