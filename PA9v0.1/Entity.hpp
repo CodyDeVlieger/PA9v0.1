@@ -90,3 +90,20 @@ sf::Vector2f getRandomPosition(int windowWidth, int windowHeight) {
     static std::uniform_int_distribution<int> distY(0, windowHeight);
     return sf::Vector2f(distX(rng), distY(rng));
 }
+
+
+
+// Projectile class
+class Projectile : public Entity<Projectile> {
+public:
+    sf::Vector2f direction;
+
+    Projectile(float x, float y, float radius, float speed, const sf::Vector2f& dir)
+        : Entity(x, y, radius, speed), direction(dir) {
+        setColor(sf::Color::Yellow);
+    }
+
+    void update(const sf::Vector2f& target = sf::Vector2f(0, 0)) override {
+        updatePosition(direction.x, direction.y);
+    }
+};
