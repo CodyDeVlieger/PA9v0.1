@@ -1,3 +1,5 @@
 # PA9v0.1
 
-currently just Chat GPT code, everything must be changed
+PA 9
+Top down shooter game!
+
