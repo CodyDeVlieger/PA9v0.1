@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <vector>
 #include <memory>
 #include <cmath>
@@ -7,6 +8,9 @@
 #include "Entity.hpp"
 
 int main() {
+
+    bool isGameOver = false;
+
     // Window setup
     const int windowWidth = 1000;
     const int windowHeight = 800;
@@ -28,10 +32,10 @@ int main() {
     // Score tracking
     int score = 0;
     sf::Font font;
-   // font.loadFromFile("arial.ttf"); // Ensure you have a font file
+    font.loadFromFile("arial.ttf"); // Ensure you have a font file
     sf::Text scoreText;
     scoreText.setFont(font);
-    scoreText.setCharacterSize(24);
+    scoreText.setCharacterSize(100);
     scoreText.setFillColor(sf::Color::White);
     scoreText.setPosition(10.f, 10.f);
 
@@ -46,6 +50,35 @@ int main() {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
+
+        // Check if game is over
+        if (isGameOver) {
+            window.clear();
+
+            // Create and display "Game Over" text
+            sf::Text gameOverText;
+            gameOverText.setFont(font);
+            gameOverText.setCharacterSize(50);
+            gameOverText.setFillColor(sf::Color::Red);
+            gameOverText.setString("GAME OVER\nScore: " + std::to_string(score));
+            gameOverText.setPosition(windowWidth / 2.f - gameOverText.getGlobalBounds().width / 2.f,
+                windowHeight / 2.f - gameOverText.getGlobalBounds().height / 2.f);
+
+            window.draw(gameOverText);
+            window.display();
+
+            // Wait for the player to close the window or restart the game
+            while (window.isOpen()) {
+                sf::Event event;
+                while (window.pollEvent(event)) {
+                    if (event.type == sf::Event::Closed)
+                        window.close();
+                }
+            }
+            break; // Exit the main loop
+        }
+
 
         // Update player
         sf::Vector2f direction(0.f, 0.f);
@@ -96,7 +129,18 @@ int main() {
         for (auto& enemy : enemies) {
             enemy->update(player.position);
         }
+        
+        //Player enemy collision???
+        for (const auto& enemy : enemies) {
+            float dx = player.position.x - enemy->position.x;
+            float dy = player.position.y - enemy->position.y;
+            float distance = std::sqrt(dx * dx + dy * dy);
 
+            if (distance < player.shape.getRadius() + enemy->shape.getRadius()) {
+                isGameOver = true; // Trigger game over
+                break; // Exit the collision check
+            }
+        }
         // Check collisions
         for (auto it = projectiles.begin(); it != projectiles.end();) {
             bool removed = false;
@@ -117,6 +161,7 @@ int main() {
             }
         }
 
+        
         // Remove projectiles out of bounds
         projectiles.erase(
             std::remove_if(projectiles.begin(), projectiles.end(),
@@ -132,8 +177,9 @@ int main() {
         // Update score text
         std::ostringstream scoreStream;
         scoreStream << "Score: " << score;
-        scoreText.setString(scoreStream.str());
+        scoreText.setString("Score: " + std::to_string(score));
         window.draw(scoreText);
+       
 
         window.draw(player.shape);
         for (const auto& enemy : enemies) {
