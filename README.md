@@ -1,3 +1,5 @@
 # PA9v0.1
 
-currently just Chat GPT code, everything must be changed
+first working branch 
+wsad movemnt
+enemy spawns
